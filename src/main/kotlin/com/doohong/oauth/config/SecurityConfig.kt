@@ -14,17 +14,12 @@ import java.lang.Exception
 
 @Configuration
 @EnableWebSecurity
-class SecurityConfig : WebSecurityConfigurerAdapter() {
-    @Bean
-    fun noOpPasswordEncoder(): PasswordEncoder {
-        return NoOpPasswordEncoder.getInstance()
-    }
+class SecurityConfig(
+    private val authenticationProvider: CustomAuthenticationProvider
+) : WebSecurityConfigurerAdapter() {
 
     override fun configure(auth: AuthenticationManagerBuilder) {
-        auth.inMemoryAuthentication()
-                .withUser("user")
-                .password("{noop}pass")
-                .roles("USER")
+        auth.authenticationProvider(authenticationProvider)
     }
 
     override fun configure(security: HttpSecurity) {

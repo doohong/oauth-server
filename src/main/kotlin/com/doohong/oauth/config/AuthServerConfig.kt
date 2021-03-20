@@ -7,6 +7,11 @@ import org.springframework.security.oauth2.config.annotation.configurers.ClientD
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer
 import javax.sql.DataSource
+import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore
+
+import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer
+import java.lang.Exception
+
 
 @Configuration
 @EnableAuthorizationServer
@@ -23,6 +28,11 @@ class AuthServerConfig(
 //                .authorizedGrantTypes("authorization_code")
 //                .scopes("read", "write")
 //                .accessTokenValiditySeconds(30000);
+    }
+
+    @Throws(Exception::class)
+    override fun configure(endpoints: AuthorizationServerEndpointsConfigurer) {
+        endpoints.tokenStore(JdbcTokenStore(dataSource))
     }
 }
 
