@@ -39,4 +39,25 @@ class Oauth2Controller(
             gson.fromJson(response.body, OAuthToken::class.java)
         } else null
     }
+
+    @GetMapping(value = ["/token/refresh"])
+    fun refreshToken(@RequestParam refreshToken: String?): OAuthToken? {
+        val credentials = "testClientId:testSecret"
+        val encodedCredentials = String(Base64.encodeBase64(credentials.toByteArray()))
+        val headers = HttpHeaders()
+        headers.contentType = MediaType.APPLICATION_FORM_URLENCODED
+        headers.add("Accept", MediaType.APPLICATION_JSON_VALUE)
+        headers.add("Authorization", "Basic $encodedCredentials")
+        val params: MultiValueMap<String, String> = LinkedMultiValueMap()
+        params.add("refresh_token", refreshToken)
+        params.add("grant_type", "refresh_token")
+        val request = HttpEntity(params, headers)
+        val response = restTemplate.postForEntity(
+            "http://localhost:8081/oauth/token", request,
+            String::class.java
+        )
+        return if (response.statusCode == HttpStatus.OK) {
+            gson.fromJson(response.body, OAuthToken::class.java)
+        } else null
+    }
 }
