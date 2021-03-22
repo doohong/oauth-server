@@ -1,4 +1,4 @@
-package com.doohong.oauth.model
+package com.doohong.oauth.oauth.model
 
 data class OAuthToken(
         val access_token: String,

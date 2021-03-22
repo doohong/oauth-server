@@ -1,4 +1,4 @@
-package com.doohong.oauth.user
+package com.doohong.oauth.user.model
 
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
@@ -11,7 +11,7 @@ import javax.persistence.Id
 class User(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    val id : Long,
+    var id : Long? = null,
     val memberId : String,
     val memberPassword : String,
     val phoneNumber: String?

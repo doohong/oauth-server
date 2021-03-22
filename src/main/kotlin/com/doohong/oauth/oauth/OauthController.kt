@@ -1,6 +1,6 @@
 package com.doohong.oauth.oauth
 
-import com.doohong.oauth.model.OAuthToken
+import com.doohong.oauth.oauth.model.OAuthToken
 import com.google.gson.Gson
 import org.apache.commons.codec.binary.Base64
 import org.springframework.http.HttpEntity
