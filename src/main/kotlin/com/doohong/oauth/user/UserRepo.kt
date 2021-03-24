@@ -2,7 +2,9 @@ package com.doohong.oauth.user
 
 import com.doohong.oauth.user.model.User
 import org.springframework.data.repository.CrudRepository
+import org.springframework.stereotype.Repository
 
+@Repository
 interface UserRepo: CrudRepository<User, Long> {
-    fun  findByName(name: String): User?
+    fun  findByMemberId(memberId: String): User?
 }

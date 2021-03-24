@@ -12,7 +12,7 @@ class UserService(
     private val passwordEncoder: PasswordEncoder
 ) {
     fun registerUser(@RequestBody req: RegisterUserRequest): Boolean {
-        userRepo.save(User(null, req.memberId, passwordEncoder.encode(req.memberPassword), req.phoneNumber))
+        userRepo.save(User(memberId = req.memberId, memberPassword = passwordEncoder.encode(req.memberPassword), phoneNumber = req.phoneNumber))
         return true
     }
 }

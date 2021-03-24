@@ -11,14 +11,11 @@ import javax.persistence.Id
 class User(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    var id : Long? = null,
+    val id : Long = 0,
     val memberId : String,
     val memberPassword : String,
     val phoneNumber: String?
 ) : UserDetails {
-
-    // Default constructor가 필요하다
-    constructor() : this(-1, "", "", null)
 
     override fun getAuthorities(): MutableCollection<out GrantedAuthority> {
         TODO("Not yet implemented")

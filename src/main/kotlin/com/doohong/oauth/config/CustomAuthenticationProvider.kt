@@ -21,7 +21,7 @@ class CustomAuthenticationProvider(
     override fun authenticate(authentication: Authentication): Authentication {
         val name: String = authentication.name
         val password: String = authentication.credentials.toString()
-        val user = userRepo.findByName(name) ?: throw UsernameNotFoundException("user is not exists")
+        val user = userRepo.findByMemberId(name) ?: throw UsernameNotFoundException("user is not exists")
         if (!passwordEncoder.matches(
                 password,
                 user.getPassword()
