@@ -40,6 +40,7 @@ class Oauth2Controller(
         } else null
     }
 
+    // 테스트용 토큰 refresh
     @GetMapping(value = ["/token/refresh"])
     fun refreshToken(@RequestParam refreshToken: String?): OAuthToken? {
         val credentials = "testClientId:testSecret"

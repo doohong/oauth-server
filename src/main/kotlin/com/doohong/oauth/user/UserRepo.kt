@@ -1,6 +1,6 @@
 package com.doohong.oauth.user
 
-import com.doohong.oauth.user.model.User
+import com.doohong.oauth.user.entity.User
 import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Repository
 

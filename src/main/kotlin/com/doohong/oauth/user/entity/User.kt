@@ -1,8 +1,11 @@
-package com.doohong.oauth.user.model
+package com.doohong.oauth.user.entity
 
 import org.springframework.security.core.GrantedAuthority
+import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
+import javax.persistence.ElementCollection
 import javax.persistence.Entity
+import javax.persistence.FetchType
 import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType
 import javax.persistence.Id
@@ -14,11 +17,13 @@ class User(
     val id : Long = 0,
     val memberId : String,
     val memberPassword : String,
-    val phoneNumber: String?
+    val phoneNumber: String?,
+    @ElementCollection(fetch = FetchType.EAGER)
+    val roles: List<String>
 ) : UserDetails {
 
-    override fun getAuthorities(): MutableCollection<out GrantedAuthority> {
-        TODO("Not yet implemented")
+    override fun getAuthorities(): List<SimpleGrantedAuthority> {
+        return roles.map { SimpleGrantedAuthority(it) }
     }
 
     override fun getPassword(): String {
