@@ -1,42 +1,83 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
-plugins {
-    id("org.springframework.boot") version "2.3.4.RELEASE"
-    id("io.spring.dependency-management") version "1.0.11.RELEASE"
-    kotlin("jvm") version "1.4.30"
-    kotlin("plugin.spring") version "1.4.30"
-    kotlin("plugin.jpa") version "1.4.30"
-}
-
-group = "com.doohong"
-version = "0.0.1-SNAPSHOT"
-java.sourceCompatibility = JavaVersion.VERSION_11
-
-repositories {
-    mavenCentral()
-}
-
-dependencies {
-    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-    implementation("org.springframework.boot:spring-boot-starter-web")
-    implementation("org.springframework.cloud:spring-cloud-starter-security:2.1.2.RELEASE")
-    implementation("org.springframework.cloud:spring-cloud-starter-oauth2:2.1.2.RELEASE")
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
-    implementation("org.jetbrains.kotlin:kotlin-reflect")
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-    implementation("com.google.code.gson:gson")
-    runtimeOnly("com.h2database:h2")
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testImplementation("org.springframework.security:spring-security-test")
-}
-
-tasks.withType<KotlinCompile> {
-    kotlinOptions {
-        freeCompilerArgs = listOf("-Xjsr305=strict")
-        jvmTarget = "11"
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath( "org.jetbrains.kotlin:kotlin-noarg:1.3.71")
     }
 }
 
-tasks.withType<Test> {
-    useJUnitPlatform()
+plugins {
+    id("org.springframework.boot") version "2.2.6.RELEASE" apply false
+    id("io.spring.dependency-management") version "1.0.9.RELEASE"
+    kotlin("jvm") version "1.3.71"
+    kotlin("plugin.spring") version "1.3.71"
+    kotlin("plugin.jpa") version "1.3.71"
+}
+
+allprojects {
+
+    group = "com.doohong.oauth"
+    version = "staging"
+
+    tasks.withType<JavaCompile> {
+        sourceCompatibility = "1.8"
+        targetCompatibility = "1.8"
+    }
+
+    tasks.withType<KotlinCompile> {
+        kotlinOptions {
+            freeCompilerArgs = listOf("-Xjsr305=strict")
+            jvmTarget = "1.8"
+        }
+    }
+
+    tasks.withType<Test> {
+        useJUnitPlatform()
+    }
+}
+
+subprojects {
+    repositories {
+        mavenCentral()
+    }
+
+    apply {
+        plugin("kotlin")
+        plugin("kotlin-spring")
+        plugin("kotlin-jpa")
+        plugin("idea")
+        plugin("eclipse")
+        plugin("org.springframework.boot")
+        plugin("io.spring.dependency-management")
+        plugin( "kotlin-allopen")
+    }
+    val ktlint by configurations.creating
+
+    dependencies {
+        ktlint("com.pinterest:ktlint:0.35.0")
+    }
+
+    val verifyKtlint = task("ktlint", JavaExec::class) {
+        description = "Check *.gradle.kts code style."
+        classpath = ktlint
+        main = "com.pinterest.ktlint.Main"
+        args("src/**/*.kt")
+    }
+
+    tasks.check.get().dependsOn(verifyKtlint)
+
+    task("ktlintFormat", JavaExec::class) {
+        description = "Fix *.gradle.kts code style violations."
+        classpath = verifyKtlint.classpath
+        main = verifyKtlint.main
+        args("-F")
+        args(verifyKtlint.args)
+    }
+}
+
+allOpen {
+    annotation("javax.persistence.Entity")
 }
