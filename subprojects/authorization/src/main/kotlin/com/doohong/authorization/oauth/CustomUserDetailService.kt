@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service
 
 @Service
 class CustomUserDetailService(
-    private val userRepo: UserRepo,
+    private val userRepo: UserRepo
 ) : UserDetailsService {
     private val detailsChecker = AccountStatusUserDetailsChecker()
     override fun loadUserByUsername(name: String): UserDetails {

@@ -5,5 +5,5 @@ data class OAuthToken(
         val token_type: String,
         val refresh_token: String,
         val expires_in: Long,
-        val scope: String,
+        val scope: String
 )
